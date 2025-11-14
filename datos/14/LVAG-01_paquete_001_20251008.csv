@@ -1,0 +1,4 @@
+fecha,fecha_insercion,id_sesion,sesion_descripcion,fecha_inicio,ubicacion,id_proyecto,codigo_interno,dispositivo_descripcion,A01NYUB [Distancia (m)],DS3231 [Grados celcius (°C)],Divisor de Voltaje [Voltaje (V)],LIQ-136 [Profundidad (m)],SHT40 [Grados celcius (°C)],SHT40 [Humedad (%)],SIM7600G [Intensidad señal telefónica (Adimensional)]
+2025-09-03 15:18:02,2025-10-22T15:10:22,Sin sesión,,,,14,LVAG-01,"Estación de Nivel de Agua para Línea Base, Yerba Loca",0.93,22.75,7.98,0.0,20.51,45.29,26.0
+2025-10-08 17:11:27,2025-10-22T15:10:22,Sin sesión,,,,14,LVAG-01,"Estación de Nivel de Agua para Línea Base, Yerba Loca",1.73,22.5,7.95,0.0,23.21,38.53,16.0
+2025-10-08 17:25:16,2025-10-22T15:10:22,Sin sesión,,,,14,LVAG-01,"Estación de Nivel de Agua para Línea Base, Yerba Loca",1.0,23.25,7.97,0.0,21.72,35.5,22.0

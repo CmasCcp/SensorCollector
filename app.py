@@ -10,10 +10,10 @@ import re
 # ==== CONFIGURACIÓN ====
 CLIENT_ID = 'b348e54d-583a-4bb7-9444-ba00b058d887'
 CLIENT_SECRET = ''  # o deja en blanco si usas solo ID
-LOCAL_FOLDER = 'C:/Users/Alienware/Desktop/Proyectos software/bajar_cargar_csv/datos'  # carpeta con tus CSVs locales
+LOCAL_FOLDER = 'C:/Users/Alienware/Desktop/Proyectos software/copias/bajar_cargar_csv/datos'  # carpeta con tus CSVs locales
 ONEDRIVE_FOLDER = 'DatosSensores'  # nombre de la carpeta destino en OneDrive
 # API_URL = 'http://localhost:8084/listarUltimasMediciones?tabla=datos&disp.id_proyecto=1&limite=25&offset=0&disp.codigo_interno=EMMA-01&formato=csv'  # URL de tu API
-API_URL = 'http://api-sensores.cmasccp.cl/listarUltimasMediciones?tabla=datos&disp.id_proyecto=1&limite=25&offset=0&disp.codigo_interno=EMMA-01&formato=csv'  # URL de tu API
+# API_URL = 'http://api-sensores.cmasccp.cl/listarUltimasMediciones?tabla=datos&disp.id_proyecto=1&limite=25&offset=0&disp.codigo_interno=EMMA-01&formato=csv'  # URL de tu API
 # ========================
 
 
@@ -122,7 +122,7 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
                     print(f"📅 Iniciando desde el día siguiente: {fecha_inicio}")
                 else:
                     # 3. Si no hay datos, usar fecha específica: 2025-10-23
-                    fecha_inicio = '2025-10-23'
+                    fecha_inicio = '2005-10-23'
                     print(f"📅 No hay datos previos, iniciando desde: {fecha_inicio}")
 
             # Descargar datos en paquetes de 100 registros (para evitar timeouts)
