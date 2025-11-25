@@ -1,0 +1,10 @@
+fecha,fecha_insercion,id_sesion,sesion_descripcion,fecha_inicio,ubicacion,id_proyecto,codigo_interno,dispositivo_descripcion,DS18B20 [Grados celcius (°C)],DS3231 [Grados celcius (°C)],Divisor de Voltaje [Voltaje (V)],ENV-20-EC-K1.0 [Electroconductividad ambiental (µS/cm)],ENV-20-pH [pH ambiental (pH)],SIM7600G [Intensidad señal telefónica (Adimensional)]
+2025-11-25 07:41:50,2025-11-25T07:42:34,Sin sesión,,,,13,AGUA-01,,0.0,22.25,12.36,0.0,0.0,23.0
+2025-11-25 08:44:27,2025-11-25T08:45:11,Sin sesión,,,,13,AGUA-01,,0.0,23.25,12.39,0.0,0.0,25.0
+2025-11-25 09:47:08,2025-11-25T09:47:51,Sin sesión,,,,13,AGUA-01,,0.0,25.0,12.39,0.0,0.0,22.0
+2025-11-25 10:49:53,2025-11-25T10:50:36,Sin sesión,,,,13,AGUA-01,,0.0,29.25,12.4,0.0,0.0,27.0
+2025-11-25 11:52:44,2025-11-25T11:53:28,Sin sesión,,,,13,AGUA-01,,0.0,31.75,12.42,0.0,0.0,25.0
+2025-11-25 12:55:11,2025-11-25T12:55:55,Sin sesión,,,,13,AGUA-01,,0.0,29.5,12.41,0.0,0.0,23.0
+2025-11-25 13:57:43,2025-11-25T14:07:37,Sin sesión,,,,13,AGUA-01,,0.0,29.75,12.42,0.0,0.0,25.0
+2025-11-25 15:00:31,2025-11-25T15:01:14,Sin sesión,,,,13,AGUA-01,,0.0,31.0,12.44,0.0,0.0,25.0
+2025-11-25 16:03:06,2025-11-25T16:03:50,Sin sesión,,,,13,AGUA-01,,0.0,31.25,12.43,0.0,0.0,26.0

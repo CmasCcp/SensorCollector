@@ -1,0 +1,5 @@
+fecha,fecha_insercion,id_sesion,sesion_descripcion,fecha_inicio,ubicacion,id_proyecto,codigo_interno,dispositivo_descripcion,DS18B20 [Grados celcius (°C)],DS3231 [Grados celcius (°C)],Divisor de Voltaje [Voltaje (V)],ENV-20-EC-K1.0 [Electroconductividad ambiental (µS/cm)],ENV-20-pH [pH ambiental (pH)],SIM7600G [Intensidad señal telefónica (Adimensional)]
+2025-11-25 11:14:49,2025-11-25T11:15:32,Sin sesión,,,,13,AGUA-02,,20.88,24.25,12.23,955.7,8.0,20.0
+2025-11-25 12:15:47,2025-11-25T12:21:38,Sin sesión,,,,13,AGUA-02,,21.38,27.0,12.24,958.9,7.86,10.0
+2025-11-25 13:17:34,2025-11-25T14:20:31,Sin sesión,,,,13,AGUA-02,,24.44,28.5,12.24,959.9,7.74,9.0
+2025-11-25 15:21:20,2025-11-25T15:22:08,Sin sesión,,,,13,AGUA-02,,23.75,35.0,12.27,938.2,7.73,21.0

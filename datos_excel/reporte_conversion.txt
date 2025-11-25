@@ -1,0 +1,26 @@
+REPORTE DE CONVERSIÓN CSV A XLSX
+==================================================
+Fecha: 2025-11-25 16:35:05
+Carpeta origen: datos_unificados
+Carpeta destino: datos_excel
+
+ARCHIVOS CONVERTIDOS EXITOSAMENTE:
+----------------------------------------
+• proyecto_13_unificado.csv → proyecto_13_unificado.xlsx
+  Registros: 673
+  Columnas: 19
+  Tamaño: 0.06 MB
+
+• proyecto_14_unificado.csv → proyecto_14_unificado.xlsx
+  Registros: 2,625
+  Columnas: 20
+  Tamaño: 0.23 MB
+
+
+RESUMEN:
+----------------------------------------
+Total archivos procesados: 2
+Convertidos exitosamente: 2
+Errores: 0
+Total registros convertidos: 3,298
+Tamaño total archivos XLSX: 0.29 MB

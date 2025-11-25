@@ -1,0 +1,4 @@
+fecha,fecha_insercion,id_sesion,sesion_descripcion,fecha_inicio,ubicacion,id_proyecto,codigo_interno,dispositivo_descripcion,A01NYUB [Distancia (m)],DS3231 [Grados celcius (°C)],Divisor de Voltaje [Voltaje (V)],LIQ-136 [Profundidad (m)],SHT40 [Grados celcius (°C)],SHT40 [Humedad (%)],SIM7600G [Intensidad señal telefónica (Adimensional)]
+2025-11-25 08:31:50,2025-11-25T09:04:27,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,15.5,7.92,1.06,14.72,91.49,31.0
+2025-11-25 09:01:47,2025-11-25T09:04:31,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,16.75,7.92,1.06,15.24,89.06,31.0
+2025-11-25 09:33:58,2025-11-25T09:34:58,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,18.25,7.9,1.06,16.01,85.23,31.0
