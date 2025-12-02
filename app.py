@@ -194,9 +194,9 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
                     # ya que está diseñado para traer las últimas mediciones disponibles
                     print(f"� Procesando todos los {len(df_paquete)} registros del paquete")
                     
-                    # Si existe columna de fecha, actualizar la última fecha procesada
-                    if 'fecha' in df_paquete.columns or 'date' in df_paquete.columns:
-                        col_fecha = 'fecha' if 'fecha' in df_paquete.columns else 'date'
+                    # Si existe columna de fecha_insercion, actualizar la última fecha procesada
+                    if 'fecha_insercion' in df_paquete.columns:
+                        col_fecha = 'fecha_insercion'
                         df_paquete[col_fecha] = pd.to_datetime(df_paquete[col_fecha], errors='coerce')
                         
                         # Mostrar rango de fechas para información
@@ -215,9 +215,9 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
                     # Guardar inmediatamente cada paquete como archivo CSV
                     paquete_num = offset//limite + 1
                     
-                    # Usar la fecha de los datos para el nombre del archivo
-                    if 'fecha_insercion' in df_paquete.columns or 'date' in df_paquete.columns:
-                        col_fecha = 'fecha_insercion' if 'fecha_insercion' in df_paquete.columns else 'date'
+                    # Usar la fecha_insercion de los datos para el nombre del archivo
+                    if 'fecha_insercion' in df_paquete.columns:
+                        col_fecha = 'fecha_insercion'
                         # Si ya se procesó la fecha anteriormente, usar esa columna
                         if col_fecha in df_paquete.columns and pd.api.types.is_datetime64_any_dtype(df_paquete[col_fecha]):
                             fecha_datos = df_paquete[col_fecha].max()
