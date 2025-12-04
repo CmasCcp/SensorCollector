@@ -1,0 +1,5 @@
+fecha,fecha_insercion,id_sesion,sesion_descripcion,fecha_inicio,ubicacion,id_proyecto,codigo_interno,dispositivo_descripcion,A01NYUB [Distancia (m)],DS3231 [Grados celcius (°C)],Divisor de Voltaje [Voltaje (V)],LIQ-136 [Profundidad (m)],SHT40 [Grados celcius (°C)],SHT40 [Humedad (%)],SIM7600G [Intensidad señal telefónica (Adimensional)]
+2025-12-04T07:33:42,2025-12-04 09:05:59,Sin sesión,,,,14,LVAG-04,"Estación de Nivel de Agua para Línea Base, Trapiche",0.0,13.75,8.0,0.56,13.39,100.0,22.0
+2025-12-04T08:03:38,2025-12-04 09:06:04,Sin sesión,,,,14,LVAG-04,"Estación de Nivel de Agua para Línea Base, Trapiche",0.0,14.0,7.98,0.56,13.36,100.0,22.0
+2025-12-04T08:33:35,2025-12-04 09:06:08,Sin sesión,,,,14,LVAG-04,"Estación de Nivel de Agua para Línea Base, Trapiche",0.0,14.75,8.01,0.55,14.78,97.53,22.0
+2025-12-04T09:03:34,2025-12-04 09:06:13,Sin sesión,,,,14,LVAG-04,"Estación de Nivel de Agua para Línea Base, Trapiche",0.0,15.75,8.01,0.56,14.71,94.29,22.0

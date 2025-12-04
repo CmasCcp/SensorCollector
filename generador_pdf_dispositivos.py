@@ -12,8 +12,9 @@ import warnings
 warnings.filterwarnings('ignore')
 
 class GeneradorPDFDispositivos:
-    def __init__(self, datos_folder='datos'):
+    def __init__(self, datos_folder='datos_unificados', config_file='config_report.json'):
         self.datos_folder = datos_folder
+        self.config_file = config_file
         self.pdfs_folder = 'reportes_pdf_dispositivos'
         
         # Columnas a ignorar en las tablas
@@ -32,7 +33,7 @@ class GeneradorPDFDispositivos:
         self.crear_carpeta_pdfs()
         self.styles = getSampleStyleSheet()
         self.configurar_estilos()
-        
+            
     def crear_carpeta_pdfs(self):
         """Crear carpeta para guardar los PDFs"""
         os.makedirs(self.pdfs_folder, exist_ok=True)
@@ -87,6 +88,24 @@ class GeneradorPDFDispositivos:
             leading=9  # Espaciado entre líneas
         )
     
+    def leer_config_reporte(self):
+        """Lee la configuración del reporte desde el archivo JSON"""
+        try:
+            import json
+            with open(self.config_file, 'r', encoding='utf-8') as f:
+                config = json.load(f)
+            print(f"📄 Configuración leída: {len(config)} reportes a generar")
+            return config
+        except FileNotFoundError:
+            print(f"❌ No se encontró el archivo de configuración: {self.config_file}")
+            return []
+        except json.JSONDecodeError as e:
+            print(f"❌ Error leyendo JSON de configuración: {e}")
+            return []
+        except Exception as e:
+            print(f"❌ Error general leyendo configuración: {e}")
+            return []
+    
     def escanear_estructura(self):
         """Escanea la estructura de carpetas proyecto/dispositivo/fecha"""
         estructura = {}
@@ -119,59 +138,88 @@ class GeneradorPDFDispositivos:
         
         return estructura
     
-    def leer_datos_dispositivo(self, proyecto_id, dispositivo_nombre, fechas_datos):
-        """Lee todos los datos CSV de un dispositivo y los combina"""
-        todos_los_datos = []
-        archivos_procesados = []
-        info_archivos = []
+    def leer_datos_dispositivo_con_filtro(self, proyecto_id, codigo_interno, fecha_inicio, fecha_fin, titulo=""):
+        """Lee datos del dispositivo desde datos_unificados según filtros de fecha"""
+        import pandas as pd
         
-        for fecha, archivos in fechas_datos.items():
-            for archivo in archivos:
-                try:
-                    df = pd.read_csv(archivo)
-                    
-                    # Agregar información de contexto
-                    df['Carpeta'] = fecha
-                    df['Archivo'] = os.path.basename(archivo)
-                    
-                    todos_los_datos.append(df)
-                    archivos_procesados.append(archivo)
-                    info_archivos.append({
-                        'archivo': os.path.basename(archivo),
-                        'fecha_carpeta': fecha,
-                        'registros': len(df)
-                    })
-                    
-                    print(f"📄 Leído: {os.path.basename(archivo)} ({len(df)} registros)")
-                    
-                except Exception as e:
-                    print(f"⚠️ Error leyendo {archivo}: {e}")
-                    continue
+        # Convertir fechas de filtro
+        fecha_inicio_dt = pd.to_datetime(fecha_inicio)
+        fecha_fin_dt = pd.to_datetime(fecha_fin) + pd.Timedelta(days=1) - pd.Timedelta(seconds=1)  # Final del día
         
-        if todos_los_datos:
-            df_completo = pd.concat(todos_los_datos, ignore_index=True)
-            return df_completo, info_archivos
-        else:
+        print(f"🔍 Buscando datos para {codigo_interno} entre {fecha_inicio} y {fecha_fin}")
+        
+        # Buscar archivo unificado del proyecto
+        archivo_proyecto = os.path.join(self.datos_folder, f"proyecto_{proyecto_id}_unificado.csv")
+        
+        if not os.path.exists(archivo_proyecto):
+            print(f"❌ No se encontró el archivo unificado: {archivo_proyecto}")
+            return pd.DataFrame(), []
+        
+        try:
+            # Leer el archivo completo
+            print(f"📄 Leyendo archivo unificado: {archivo_proyecto}")
+            df_completo = pd.read_csv(archivo_proyecto)
+            print(f"📊 Registros totales en archivo: {len(df_completo)}")
+            
+            # Filtrar por dispositivo
+            df_dispositivo = df_completo[df_completo['codigo_interno'] == codigo_interno].copy()
+            print(f"📊 Registros del dispositivo {codigo_interno}: {len(df_dispositivo)}")
+            
+            if df_dispositivo.empty:
+                print(f"❌ No se encontraron datos para {codigo_interno}")
+                return pd.DataFrame(), []
+            
+            # Convertir fecha_insercion a datetime con formato mixto
+            df_dispositivo['fecha_insercion'] = pd.to_datetime(df_dispositivo['fecha_insercion'], format='mixed', errors='coerce')
+            
+            # Filtrar por rango de fechas
+            df_filtrado = df_dispositivo[
+                (df_dispositivo['fecha_insercion'] >= fecha_inicio_dt) & 
+                (df_dispositivo['fecha_insercion'] <= fecha_fin_dt)
+            ].copy()
+            
+            print(f"📊 Registros filtrados por fecha: {len(df_filtrado)}")
+            
+            if df_filtrado.empty:
+                print(f"⚠️ No se encontraron datos en el rango de fechas especificado")
+                return pd.DataFrame(), []
+            
+            # Ordenar por fecha_insercion
+            df_filtrado = df_filtrado.sort_values('fecha_insercion').reset_index(drop=True)
+            
+            # Crear información de archivo simulada para compatibilidad
+            info_archivo = {
+                'archivo': f'proyecto_{proyecto_id}_unificado.csv',
+                'fecha_carpeta': f'{fecha_inicio}_a_{fecha_fin}',
+                'registros': len(df_filtrado),
+                'rango_fechas': f"{fecha_inicio} - {fecha_fin}"
+            }
+            
+            print(f"✅ Datos leídos exitosamente: {len(df_filtrado)} registros")
+            return df_filtrado, [info_archivo]
+            
+        except Exception as e:
+            print(f"❌ Error leyendo archivo {archivo_proyecto}: {e}")
             return pd.DataFrame(), []
     
     def formatear_datos_para_tabla(self, df):
         """Formatea los datos para mostrar mejor en el PDF"""
         df_display = df.copy()
         
-        # Calcular diferencias de tiempo ANTES del filtrado
-        if 'fecha_insercion' in df_display.columns:
+        # Calcular diferencias de tiempo ANTES del formateo
+        if 'fecha_insercion' in df.columns:
             try:
-                # Convertir fecha_insercion a datetime para cálculos
-                df_display['fecha_insercion_dt'] = pd.to_datetime(df_display['fecha_insercion'], errors='coerce')
-                # Ordenar por fecha_insercion para cálculo correcto
-                df_display = df_display.sort_values('fecha_insercion_dt').reset_index(drop=True)
+                # Crear copia temporal para cálculos
+                df_temp = df.copy()
+                df_temp['fecha_insercion_dt'] = pd.to_datetime(df_temp['fecha_insercion'], format='mixed', errors='coerce')
+                df_temp = df_temp.sort_values('fecha_insercion_dt').reset_index(drop=True)
                 
                 # Calcular diferencia en minutos con la fila anterior
-                df_display['diff_insercion_anterior'] = df_display['fecha_insercion_dt'].diff()
-                df_display['Min. Dif. Insercion'] = df_display['diff_insercion_anterior'].dt.total_seconds() / 60
+                df_temp['diff_insercion_anterior'] = df_temp['fecha_insercion_dt'].diff()
+                diferencias_insercion = df_temp['diff_insercion_anterior'].dt.total_seconds() / 60
                 
                 # Formatear la columna de diferencia
-                df_display['Min. Dif. Insercion'] = df_display['Min. Dif. Insercion'].apply(
+                df_display['Min. Dif. Insercion'] = diferencias_insercion.apply(
                     lambda x: 'Primera' if pd.isna(x) else f"{x:.1f}"
                 )
                 
@@ -184,18 +232,18 @@ class GeneradorPDFDispositivos:
             df_display['Min. Dif. Insercion'] = 'N/A'
         
         # Calcular diferencias para fecha de medición
-        if 'fecha' in df_display.columns:
+        if 'fecha' in df.columns:
             try:
-                # Convertir fecha a datetime para cálculos
-                df_display['fecha_dt'] = pd.to_datetime(df_display['fecha'], errors='coerce')
-                # Ya está ordenado por fecha_insercion, pero calculamos diff para fecha
+                # Crear copia temporal para cálculos
+                df_temp = df.copy()
+                df_temp['fecha_dt'] = pd.to_datetime(df_temp['fecha'], format='mixed', errors='coerce')
                 
                 # Calcular diferencia en minutos con la fila anterior
-                df_display['diff_fecha_anterior'] = df_display['fecha_dt'].diff()
-                df_display[' Min. Dif. Medicion'] = df_display['diff_fecha_anterior'].dt.total_seconds() / 60
+                df_temp['diff_fecha_anterior'] = df_temp['fecha_dt'].diff()
+                diferencias_fecha = df_temp['diff_fecha_anterior'].dt.total_seconds() / 60
                 
                 # Formatear la columna de diferencia
-                df_display[' Min. Dif. Medicion'] = df_display[' Min. Dif. Medicion'].apply(
+                df_display['Min. Dif. Medicion'] = diferencias_fecha.apply(
                     lambda x: 'Primera' if pd.isna(x) else f"{x:.1f}"
                 )
                 
@@ -203,62 +251,34 @@ class GeneradorPDFDispositivos:
                 
             except Exception as e:
                 print(f"⚠️ Error calculando diferencias temporales fecha: {e}")
-                df_display[' Min. Dif. Medicion'] = 'N/A'
+                df_display['Min. Dif. Medicion'] = 'N/A'
         else:
-            df_display[' Min. Dif. Medicion'] = 'N/A'
+            df_display['Min. Dif. Medicion'] = 'N/A'
         
-        # Calcular diferencias para fecha de medición
+        # Formatear fechas para mostrar correctamente - manejo de formatos mixtos
+        if 'fecha_insercion' in df_display.columns:
+            try:
+                # Usar format='mixed' para manejar múltiples formatos
+                df_display['fecha_insercion'] = pd.to_datetime(df_display['fecha_insercion'], format='mixed', errors='coerce')
+                df_display['fecha_insercion'] = df_display['fecha_insercion'].dt.strftime('%Y-%m-%d %H:%M:%S')
+                df_display['fecha_insercion'] = df_display['fecha_insercion'].fillna('N/A')
+            except Exception as e:
+                print(f"⚠️ Error formateando fecha_insercion: {e}")
+        
         if 'fecha' in df_display.columns:
             try:
-                # Convertir fecha a datetime para cálculos
-                df_display['fecha_dt'] = pd.to_datetime(df_display['fecha'], errors='coerce')
-                # Ya está ordenado por fecha_insercion, pero calculamos diff para fecha
-                
-                # Calcular diferencia en minutos con la fila anterior
-                df_display['diff_fecha_anterior'] = df_display['fecha_dt'].diff()
-                df_display[' Min. Dif. Medicion'] = df_display['diff_fecha_anterior'].dt.total_seconds() / 60
-                
-                # Formatear la columna de diferencia
-                df_display[' Min. Dif. Medicion'] = df_display[' Min. Dif. Medicion'].apply(
-                    lambda x: 'Primera' if pd.isna(x) else f"{x:.1f}"
-                )
-                
-                print(f"✅ Columna de diferencia temporal fecha agregada")
-                
+                # Usar format='mixed' para manejar múltiples formatos
+                df_display['fecha'] = pd.to_datetime(df_display['fecha'], format='mixed', errors='coerce')
+                df_display['fecha'] = df_display['fecha'].dt.strftime('%Y-%m-%d %H:%M:%S')
+                df_display['fecha'] = df_display['fecha'].fillna('N/A')
             except Exception as e:
-                print(f"⚠️ Error calculando diferencias temporales fecha: {e}")
-                df_display[' Min. Dif. Medicion'] = 'N/A'
-        else:
-            df_display[' Min. Dif. Medicion'] = 'N/A'
+                print(f"⚠️ Error formateando fecha: {e}")
         
-        # Filtrar columnas no deseadas (agregamos las columnas auxiliares)
-        columnas_auxiliares = ['fecha_insercion_dt', 'diff_insercion_anterior', 'fecha_dt', 'diff_fecha_anterior']
-        columnas_a_mostrar = [col for col in df_display.columns 
-                             if col not in self.columns_to_ignore + columnas_auxiliares]
-        df_display = df_display[columnas_a_mostrar]
+        # Filtrar columnas no deseadas
+        df_display = df_display.drop(columns=[col for col in self.columns_to_ignore if col in df_display.columns])
         
         print(f"🔍 Columnas filtradas: {len(df.columns)} → {len(df_display.columns)}")
         print(f"📋 Columnas mostradas: {list(df_display.columns)}")
-        
-        # Formatear fechas
-        for col in df_display.columns:
-            if 'fecha' in col.lower():
-                try:
-                    df_display[col] = pd.to_datetime(df_display[col], errors='coerce')
-                    df_display[col] = df_display[col].dt.strftime('%Y-%m-%d %H:%M:%S')
-                    # Limpiar valores NaT
-                    df_display[col] = df_display[col].fillna('N/A')
-                except:
-                    pass
-        
-        # Limitar longitud de texto
-        for col in df_display.select_dtypes(include=['object']).columns:
-            df_display[col] = df_display[col].astype(str).apply(
-                lambda x: x[:25] + '...' if len(x) > 25 else x
-            )
-        
-        # Reemplazar NaN con valores más legibles
-        df_display = df_display.fillna('N/A')
         
         return df_display
     
@@ -921,10 +941,18 @@ class GeneradorPDFDispositivos:
         
         return table
     
-    def crear_pdf_dispositivo(self, proyecto_id, dispositivo_nombre, df_datos, info_archivos):
-        """Crea un PDF completo para un dispositivo"""
+    def crear_pdf_dispositivo_filtrado(self, proyecto_id, codigo_interno, df_datos, info_archivos, fecha_inicio, fecha_fin, titulo=""):
+        """Crea un PDF completo para un dispositivo con datos filtrados"""
         
-        filename = f"reporte_{dispositivo_nombre}_proyecto_{proyecto_id}.pdf"
+        # Crear nombre de archivo con título al principio si está disponible
+        if titulo:
+            # Limpiar el título para usarlo en nombre de archivo (remover caracteres especiales)
+            titulo_limpio = "".join(c for c in titulo if c.isalnum() or c in (' ', '-', '_')).rstrip()
+            titulo_limpio = titulo_limpio.replace(' ', '_')
+            filename = f"{titulo_limpio}_reporte_{codigo_interno}_proyecto_{proyecto_id}_{fecha_inicio}_al_{fecha_fin}.pdf"
+        else:
+            filename = f"reporte_{codigo_interno}_proyecto_{proyecto_id}_{fecha_inicio}_al_{fecha_fin}.pdf"
+        
         filepath = os.path.join(self.pdfs_folder, filename)
         
         # Usar landscape para más espacio
@@ -936,62 +964,66 @@ class GeneradorPDFDispositivos:
         story = []
         
         # TÍTULO PRINCIPAL
-        title = f"REPORTE DE DATOS - {dispositivo_nombre.upper()}"
-        story.append(Paragraph(title, self.title_style))
+        title_text = f"REPORTE DE DATOS - {codigo_interno.upper()}"
+        if titulo:
+            title_text += f" ({titulo})"
+        story.append(Paragraph(title_text, self.title_style))
         
         # SUBTÍTULO
-        subtitle = f"Proyecto {proyecto_id} | Generado el {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}"
+        subtitle = (f"Proyecto {proyecto_id} | Periodo: {fecha_inicio} al {fecha_fin} | "
+                   f"Generado el {datetime.now().strftime('%d/%m/%Y %H:%M:%S')}")
         story.append(Paragraph(subtitle, self.subtitle_style))
         
-        # DESCRIPCIÓN DETALLADA
-        if not df_datos.empty and 'fecha_insercion' in df_datos.columns:
-            # Calcular fechas de inserción inicial y final
-            df_temp_fechas = df_datos.copy()
-            df_temp_fechas['fecha_insercion_dt'] = pd.to_datetime(df_temp_fechas['fecha_insercion'], errors='coerce')
-            fecha_inicial = df_temp_fechas['fecha_insercion_dt'].min()
-            fecha_final = df_temp_fechas['fecha_insercion_dt'].max()
-            
-            if pd.notna(fecha_inicial) and pd.notna(fecha_final):
-                fecha_inicial_str = fecha_inicial.strftime('%Y-%m-%d %H:%M:%S')
-                fecha_final_str = fecha_final.strftime('%Y-%m-%d %H:%M:%S')
-                
-                descripcion_text = (f"<b>Descripción del Dataset:</b><br/>"
-                                  f"<b>Fecha inserción inicial:</b> {fecha_inicial_str}<br/>"
-                                  f"<b>Fecha inserción final:</b> {fecha_final_str}<br/>"
-                                  f"<b>Código interno:</b> {dispositivo_nombre}")
-                story.append(Paragraph(descripcion_text, self.info_style))
-                story.append(Spacer(1, 15))
+        # DESCRIPCIÓN DETALLADA DEL FILTRO
+        descripcion_text = (
+            f"<b>Descripción del Dataset Filtrado:</b><br/>"
+            f"<b>Dispositivo:</b> {codigo_interno}<br/>"
+            f"<b>Proyecto:</b> {proyecto_id}<br/>"
+            f"<b>Fecha inicio filtro:</b> {fecha_inicio}<br/>"
+            f"<b>Fecha fin filtro:</b> {fecha_fin}<br/>"
+            f"<b>Título:</b> {titulo if titulo else 'Sin título'}<br/>"
+            f"<b>Criterio de filtro:</b> fecha_insercion entre las fechas especificadas"
+        )
+        story.append(Paragraph(descripcion_text, self.info_style))
+        story.append(Spacer(1, 15))
         
-        story.append(Spacer(1, 20))
-        
-        # RESUMEN DE ARCHIVOS
+        # RESUMEN DE ARCHIVOS FILTRADOS
         if info_archivos:
             total_registros = sum(info['registros'] for info in info_archivos)
+            total_registros_originales = sum(info.get('registros_originales', info['registros']) for info in info_archivos)
             total_archivos = len(info_archivos)
             
-            resumen_text = (f"Archivos: <b>{total_archivos}</b> | "
-                          f"Registros: <b>{total_registros:,}</b> | "
-                          f"Fechas: <b>{len(set(info['fecha_carpeta'] for info in info_archivos))}</b>")
+            resumen_text = (
+                f"Archivos procesados: <b>{total_archivos}</b> | "
+                f"Registros filtrados: <b>{total_registros:,}</b> | "
+                f"Registros originales: <b>{total_registros_originales:,}</b> | "
+                f"Eficiencia filtro: <b>{(total_registros/total_registros_originales*100):.1f}%</b> | "
+                f"Fechas: <b>{len(set(info['fecha_carpeta'] for info in info_archivos))}</b>"
+            )
             story.append(Paragraph(resumen_text, self.info_style))
             story.append(Spacer(1, 15))
             
             # Tabla de resumen de archivos
-            archivo_data = [['Archivo', 'Fecha Carpeta', 'Registros']]
+            archivo_data = [['Archivo', 'Fecha Carpeta', 'Registros Filtrados', 'Registros Originales', 'Eficiencia']]
             for info in info_archivos:
+                registros_orig = info.get('registros_originales', info['registros'])
+                eficiencia = (info['registros'] / registros_orig * 100) if registros_orig > 0 else 0
                 archivo_data.append([
                     info['archivo'],
                     info['fecha_carpeta'],
-                    f"{info['registros']:,}"
+                    f"{info['registros']:,}",
+                    f"{registros_orig:,}",
+                    f"{eficiencia:.1f}%"
                 ])
             
-            archivo_table = Table(archivo_data, colWidths=[4*inch, 2*inch, 1*inch])
+            archivo_table = Table(archivo_data, colWidths=[3*inch, 1.5*inch, 1.2*inch, 1.2*inch, 1*inch])
             archivo_table.setStyle(TableStyle([
                 ('BACKGROUND', (0, 0), (-1, 0), colors.darkgreen),
                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
                 ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
                 ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
                 ('FONTNAME', (0, 1), (-1, -1), 'Helvetica'),
-                ('FONTSIZE', (0, 0), (-1, -1), 9),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
                 ('GRID', (0, 0), (-1, -1), 1, colors.black),
                 ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.lightgrey]),
             ]))
@@ -1107,41 +1139,58 @@ class GeneradorPDFDispositivos:
                 story.append(elemento)
         
         else:
-            story.append(Paragraph("[X] No hay datos disponibles para este dispositivo", self.info_style))
+            story.append(Paragraph("[X] No hay datos disponibles para este dispositivo en el rango de fechas especificado", self.info_style))
         
         # Construir PDF
         doc.build(story)
         return filepath
     
-    def generar_todos_los_pdfs(self):
-        """Genera PDFs para todos los dispositivos"""
-        print("🚀 Iniciando generación de PDFs por dispositivo...")
+    def generar_pdfs_desde_config(self):
+        """Genera PDFs basados en la configuración del archivo JSON"""
+        print(f"🚀 Iniciando generación de PDFs desde configuración...")
         
-        # Escanear estructura
-        estructura = self.escanear_estructura()
+        # Leer configuración
+        configuraciones = self.leer_config_reporte()
         
-        if not estructura:
-            print("❌ No se encontró estructura de datos válida")
+        if not configuraciones:
+            print("❌ No se encontraron configuraciones válidas")
             return []
         
         pdfs_generados = []
         
-        for proyecto_id, dispositivos in estructura.items():
-            for dispositivo_nombre, fechas_datos in dispositivos.items():
-                print(f"\n Generando PDF para {dispositivo_nombre} (Proyecto {proyecto_id})...")
-                
-                # Leer datos del dispositivo
-                df_datos, info_archivos = self.leer_datos_dispositivo(
-                    proyecto_id, dispositivo_nombre, fechas_datos
+        for i, config in enumerate(configuraciones, 1):
+            proyecto_id = config['proyecto']
+            codigo_interno = config['codigo_interno']
+            fecha_inicio = config['fecha_inicio']
+            fecha_fin = config['fecha_fin']
+            titulo = config.get('titulo', '')
+            
+            print(f"\n📄 [{i}/{len(configuraciones)}] Generando PDF para {codigo_interno} (Proyecto {proyecto_id})...")
+            print(f"📅 Rango: {fecha_inicio} al {fecha_fin}")
+            if titulo:
+                print(f"🏷️ Título: {titulo}")
+            
+            try:
+                # Leer datos del dispositivo con filtro de fechas
+                df_datos, info_archivos = self.leer_datos_dispositivo_con_filtro(
+                    proyecto_id, codigo_interno, fecha_inicio, fecha_fin, titulo
                 )
                 
+                if df_datos.empty:
+                    print(f"⚠️ No se encontraron datos para {codigo_interno} en el rango especificado")
+                    continue
+                
                 # Crear PDF
-                pdf_path = self.crear_pdf_dispositivo(
-                    proyecto_id, dispositivo_nombre, df_datos, info_archivos
+                pdf_path = self.crear_pdf_dispositivo_filtrado(
+                    proyecto_id, codigo_interno, df_datos, info_archivos, fecha_inicio, fecha_fin, titulo
                 )
                 
                 pdfs_generados.append(pdf_path)
                 print(f"✅ PDF generado: {os.path.basename(pdf_path)}")
+                
+            except Exception as e:
+                print(f"❌ Error procesando {codigo_interno}: {e}")
+                continue
         
         print(f"\n🎉 Generación completada! Se crearon {len(pdfs_generados)} PDFs en '{self.pdfs_folder}'")
         return pdfs_generados
@@ -1149,11 +1198,10 @@ class GeneradorPDFDispositivos:
 
 # ===== EJECUCIÓN PRINCIPAL =====
 if __name__ == "__main__":
-    print("📄 Iniciando generación de reportes PDF...")
+    print("📄 Iniciando generación de reportes PDF desde configuración...")
     
-
     generador = GeneradorPDFDispositivos()
-    pdfs = generador.generar_todos_los_pdfs()
+    pdfs = generador.generar_pdfs_desde_config()
     
     if pdfs:
         print("\n📋 PDFs GENERADOS:")

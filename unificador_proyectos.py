@@ -59,6 +59,8 @@ class UnificadorProyectos:
                 if not os.path.isdir(fecha_path):
                     continue
                 
+                print(f"    📅 Fecha: {fecha_carpeta}")
+                
                 # Buscar archivos CSV en la carpeta de fecha
                 patron_csv = os.path.join(fecha_path, "*.csv")
                 archivos_csv = glob.glob(patron_csv)
@@ -87,7 +89,7 @@ class UnificadorProyectos:
                             'ruta': archivo_csv
                         })
                         
-                        print(f"    📄 {os.path.basename(archivo_csv)} ({len(df)} registros)")
+                        print(f"      📄 {os.path.basename(archivo_csv)} ({len(df)} registros)")
                         
                     except Exception as e:
                         print(f"    ⚠️ Error leyendo {archivo_csv}: {e}")
@@ -116,11 +118,21 @@ class UnificadorProyectos:
             columnas_ordenamiento.append('fecha')
         
         if columnas_ordenamiento:
-            # Convertir fechas a datetime para ordenamiento correcto
-            for col in columnas_ordenamiento:
-                df_unificado[col] = pd.to_datetime(df_unificado[col], errors='coerce')
+            # Crear una copia para ordenamiento sin modificar las columnas originales
+            df_temp = df_unificado.copy()
             
-            df_unificado = df_unificado.sort_values(columnas_ordenamiento, ascending=True)
+            # Convertir fechas a datetime solo para ordenamiento
+            for col in columnas_ordenamiento:
+                df_temp[f'{col}_temp'] = pd.to_datetime(df_temp[col], errors='coerce')
+            
+            # Ordenar usando las columnas temporales
+            columnas_temp = [f'{col}_temp' for col in columnas_ordenamiento]
+            df_temp_sorted = df_temp.sort_values(columnas_temp, ascending=True)
+            
+            # Obtener el índice ordenado y aplicarlo al DataFrame original
+            df_unificado = df_unificado.iloc[df_temp_sorted.index].reset_index(drop=True)
+            
+            print(f"    ✓ Datos ordenados por: {', '.join(columnas_ordenamiento)}")
         
         # Reorganizar columnas (poner las de contexto al final)
         columnas_contexto = ['proyecto', 'dispositivo', 'fecha_carpeta', 'archivo_origen']
@@ -137,13 +149,14 @@ class UnificadorProyectos:
         dispositivos_unicos = df_unificado['dispositivo'].nunique()
         fechas_unicas = df_unificado['fecha_carpeta'].nunique()
         
-        # Rango de fechas
+        # Rango de fechas para el reporte
         fecha_inicio = fecha_final = "N/A"
         if 'fecha_insercion' in df_unificado.columns:
-            fechas_validas = pd.to_datetime(df_unificado['fecha_insercion'], errors='coerce').dropna()
-            if not fechas_validas.empty:
-                fecha_inicio = fechas_validas.min().strftime('%Y-%m-%d %H:%M:%S')
-                fecha_final = fechas_validas.max().strftime('%Y-%m-%d %H:%M:%S')
+            # Convertir temporalmente para obtener el rango sin modificar los datos originales
+            fechas_temp = pd.to_datetime(df_unificado['fecha_insercion'], errors='coerce').dropna()
+            if not fechas_temp.empty:
+                fecha_inicio = fechas_temp.min().strftime('%Y-%m-%d %H:%M:%S')
+                fecha_final = fechas_temp.max().strftime('%Y-%m-%d %H:%M:%S')
         
         resumen = {
             'proyecto_id': proyecto_id,

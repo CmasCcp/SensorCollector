@@ -1,14 +1,14 @@
 REPORTE DE UNIFICACIÓN DE DATOS
-Generado: 2025-11-25 18:34:31
+Generado: 2025-12-04 13:43:45
 ==================================================
 
 PROYECTO 13
 Archivo: proyecto_13_unificado.csv
-Registros: 1,377
-Archivos procesados: 15
+Registros: 1,772
+Archivos procesados: 19
 Dispositivos: 2
 Fechas: 1
-Período: 2025-10-25 00:15:48 → 2025-11-25 17:24:51
+Período: 2025-10-25 00:15:48 → 2025-12-04 13:08:59
 
 Archivos detalle:
   - AGUA-01/2025-10-25/AGUA-01_paquete_001_20251104.csv (100 registros)
@@ -18,24 +18,28 @@ Archivos detalle:
   - AGUA-01/2025-10-25/AGUA-01_paquete_005_20251115.csv (100 registros)
   - AGUA-01/2025-10-25/AGUA-01_paquete_006_20251120.csv (100 registros)
   - AGUA-01/2025-10-25/AGUA-01_paquete_007_20251125.csv (100 registros)
-  - AGUA-01/2025-10-25/AGUA-01_paquete_008_20251125.csv (17 registros)
+  - AGUA-01/2025-10-25/AGUA-01_paquete_008_20251129.csv (100 registros)
+  - AGUA-01/2025-10-25/AGUA-01_paquete_009_20251204.csv (100 registros)
+  - AGUA-01/2025-10-25/AGUA-01_paquete_010_20251204.csv (19 registros)
   - AGUA-02/2025-10-25/AGUA-02_paquete_001_20251029.csv (100 registros)
   - AGUA-02/2025-10-25/AGUA-02_paquete_002_20251104.csv (100 registros)
   - AGUA-02/2025-10-25/AGUA-02_paquete_003_20251108.csv (100 registros)
   - AGUA-02/2025-10-25/AGUA-02_paquete_004_20251113.csv (100 registros)
   - AGUA-02/2025-10-25/AGUA-02_paquete_005_20251117.csv (100 registros)
   - AGUA-02/2025-10-25/AGUA-02_paquete_006_20251122.csv (100 registros)
-  - AGUA-02/2025-10-25/AGUA-02_paquete_007_20251125.csv (60 registros)
+  - AGUA-02/2025-10-25/AGUA-02_paquete_007_20251127.csv (100 registros)
+  - AGUA-02/2025-10-25/AGUA-02_paquete_008_20251202.csv (100 registros)
+  - AGUA-02/2025-10-25/AGUA-02_paquete_009_20251204.csv (53 registros)
 
 ------------------------------
 
 PROYECTO 14
 Archivo: proyecto_14_unificado.csv
-Registros: 5,198
-Archivos procesados: 54
+Registros: 6,781
+Archivos procesados: 69
 Dispositivos: 4
 Fechas: 1
-Período: 2025-10-25 09:04:16 → 2025-11-25 09:34:58
+Período: 2025-10-25 09:04:16 → 2025-12-04 09:26:04
 
 Archivos detalle:
   - LVAG-02/2025-10-25/LVAG-02_paquete_001_20251027.csv (100 registros)
@@ -51,7 +55,10 @@ Archivos detalle:
   - LVAG-02/2025-10-25/LVAG-02_paquete_011_20251118.csv (100 registros)
   - LVAG-02/2025-10-25/LVAG-02_paquete_012_20251121.csv (100 registros)
   - LVAG-02/2025-10-25/LVAG-02_paquete_013_20251125.csv (100 registros)
-  - LVAG-02/2025-10-25/LVAG-02_paquete_014_20251125.csv (10 registros)
+  - LVAG-02/2025-10-25/LVAG-02_paquete_014_20251127.csv (100 registros)
+  - LVAG-02/2025-10-25/LVAG-02_paquete_015_20251130.csv (100 registros)
+  - LVAG-02/2025-10-25/LVAG-02_paquete_016_20251202.csv (100 registros)
+  - LVAG-02/2025-10-25/LVAG-02_paquete_017_20251204.csv (94 registros)
   - LVAG-03/2025-10-25/LVAG-03_paquete_001_20251029.csv (100 registros)
   - LVAG-03/2025-10-25/LVAG-03_paquete_002_20251031.csv (100 registros)
   - LVAG-03/2025-10-25/LVAG-03_paquete_003_20251102.csv (100 registros)
@@ -64,7 +71,11 @@ Archivos detalle:
   - LVAG-03/2025-10-25/LVAG-03_paquete_010_20251117.csv (100 registros)
   - LVAG-03/2025-10-25/LVAG-03_paquete_011_20251120.csv (100 registros)
   - LVAG-03/2025-10-25/LVAG-03_paquete_012_20251123.csv (100 registros)
-  - LVAG-03/2025-10-25/LVAG-03_paquete_013_20251125.csv (56 registros)
+  - LVAG-03/2025-10-25/LVAG-03_paquete_013_20251126.csv (100 registros)
+  - LVAG-03/2025-10-25/LVAG-03_paquete_014_20251128.csv (100 registros)
+  - LVAG-03/2025-10-25/LVAG-03_paquete_015_20251201.csv (100 registros)
+  - LVAG-03/2025-10-25/LVAG-03_paquete_016_20251202.csv (100 registros)
+  - LVAG-03/2025-10-25/LVAG-03_paquete_017_20251204.csv (87 registros)
   - LVAG-04/2025-10-25/LVAG-04_paquete_001_20251027.csv (100 registros)
   - LVAG-04/2025-10-25/LVAG-04_paquete_002_20251029.csv (100 registros)
   - LVAG-04/2025-10-25/LVAG-04_paquete_003_20251031.csv (100 registros)
@@ -78,7 +89,11 @@ Archivos detalle:
   - LVAG-04/2025-10-25/LVAG-04_paquete_011_20251117.csv (100 registros)
   - LVAG-04/2025-10-25/LVAG-04_paquete_012_20251120.csv (100 registros)
   - LVAG-04/2025-10-25/LVAG-04_paquete_013_20251123.csv (100 registros)
-  - LVAG-04/2025-10-25/LVAG-04_paquete_014_20251125.csv (68 registros)
+  - LVAG-04/2025-10-25/LVAG-04_paquete_014_20251126.csv (100 registros)
+  - LVAG-04/2025-10-25/LVAG-04_paquete_015_20251128.csv (100 registros)
+  - LVAG-04/2025-10-25/LVAG-04_paquete_016_20251202.csv (100 registros)
+  - LVAG-04/2025-10-25/LVAG-04_paquete_017_20251204.csv (100 registros)
+  - LVAG-04/2025-10-25/LVAG-04_paquete_018_20251204.csv (4 registros)
   - LVAG-05/2025-10-25/LVAG-05_paquete_001_20251027.csv (100 registros)
   - LVAG-05/2025-10-25/LVAG-05_paquete_002_20251030.csv (100 registros)
   - LVAG-05/2025-10-25/LVAG-05_paquete_003_20251101.csv (100 registros)
@@ -91,7 +106,11 @@ Archivos detalle:
   - LVAG-05/2025-10-25/LVAG-05_paquete_010_20251118.csv (100 registros)
   - LVAG-05/2025-10-25/LVAG-05_paquete_011_20251120.csv (100 registros)
   - LVAG-05/2025-10-25/LVAG-05_paquete_012_20251124.csv (100 registros)
-  - LVAG-05/2025-10-25/LVAG-05_paquete_013_20251125.csv (64 registros)
+  - LVAG-05/2025-10-25/LVAG-05_paquete_013_20251126.csv (100 registros)
+  - LVAG-05/2025-10-25/LVAG-05_paquete_014_20251128.csv (100 registros)
+  - LVAG-05/2025-10-25/LVAG-05_paquete_015_20251130.csv (100 registros)
+  - LVAG-05/2025-10-25/LVAG-05_paquete_016_20251202.csv (100 registros)
+  - LVAG-05/2025-10-25/LVAG-05_paquete_017_20251204.csv (96 registros)
 
 ------------------------------
 
