@@ -1,0 +1,42 @@
+# Carpetas de datos
+datos/
+datos_unificados/
+datos_excel/
+reportes_pdf_dispositivos/
+
+# Archivos de configuración sensibles
+token.txt
+*.token
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+
+# Archivos de Office temporales
+~$*
+*.bak
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini

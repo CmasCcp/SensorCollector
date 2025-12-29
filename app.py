@@ -155,6 +155,8 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
             total_registros = 0
             datos_completos = []
             ultima_fecha_procesada = None
+            max_paquetes = 50  # Límite de seguridad para evitar loops infinitos
+            paquetes_procesados = 0
             
             try:
                 print(f"📡 Descargando datos para {codigo_interno} en paquetes de {limite} registros...")
@@ -165,15 +167,44 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
                 
                 # Descargar datos en paquetes hasta que no haya más
                 while True:
-                    # Construir URL de la API con paginación y fecha de inicio
-                    api_url = f"https://api-sensores.cmasccp.cl/listarUltimasMediciones?tabla=datos&order_by=fecha_insercion&disp.id_proyecto={proyecto}&limite={limite}&offset={offset}&disp.codigo_interno={codigo_interno}&fecha_inicio={fecha_inicio}&formato=csv"
+                    paquetes_procesados += 1
+                    
+                    # Verificar límite de seguridad
+                    if paquetes_procesados > max_paquetes:
+                        print(f"⚠️  Alcanzado límite de seguridad de {max_paquetes} paquetes")
+                        break
+                    # Construir URL de la API - verificar si hay URL personalizada en config
+                    if 'api_url' in dispositivo and dispositivo['api_url']:
+                        # Usar la URL personalizada del dispositivo
+                        api_base_url = dispositivo['api_url']
+                        print(f"🔧 Usando URL personalizada: {api_base_url}")
+                        api_url = f"{api_base_url}?tabla=datos&order_by=fecha_insercion&disp.id_proyecto={proyecto}&limite={limite}&offset={offset}&disp.codigo_interno={codigo_interno}&fecha_inicio={fecha_inicio}&formato=csv"
+                    else:
+                        # Usar la URL por defecto
+                        api_base_url = "https://api-sensores.cmasccp.cl/listarUltimasMediciones"
+                        print(f"🔧 Usando URL por defecto: {api_base_url}")
+                        api_url = f"{api_base_url}?tabla=datos&order_by=fecha_insercion&disp.id_proyecto={proyecto}&limite={limite}&offset={offset}&disp.codigo_interno={codigo_interno}&fecha_inicio={fecha_inicio}&formato=csv"
                     
                     print(f"📦 Paquete {offset//limite + 1}: Descargando registros {offset + 1} al {offset + limite}")
                     print(f"🔗 URL: {api_url}")
                     
                     response = requests.get(api_url, headers=headers, timeout=180)
                     print(f"📡 Respuesta HTTP: {response.status_code}")
-                    response.raise_for_status()
+                    
+                    # Agregar más información sobre la respuesta
+                    if response.status_code != 200:
+                        print(f"❌ Error HTTP {response.status_code}: {response.reason}")
+                        print(f"📄 Contenido de error: {response.text[:500]}")  # Primeros 500 caracteres
+                        # Para ciertos errores, intentar continuar con el siguiente paquete
+                        if response.status_code in [404, 524]:  # Not Found o Gateway Timeout
+                            print(f"⚠️  Saltando paquete debido a error {response.status_code}")
+                            offset += limite
+                            if offset > limite * 10:  # Evitar loops infinitos
+                                print(f"❌ Demasiados errores consecutivos, deteniéndose")
+                                break
+                            continue
+                        else:
+                            response.raise_for_status()
                     
                     # Verificar que tenemos contenido CSV
                     response_text = response.text.strip()
@@ -195,9 +226,19 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
                         if not df_paquete.empty:
                             print(f"🏷️  Columnas: {list(df_paquete.columns)}")
                     except Exception as csv_error:
-                        print(f"❌ Error leyendo CSV: {csv_error}")
+                        print(f"❌ Error leyendo CSV en paquete {paquetes_procesados}: {csv_error}")
                         print(f"📄 Contenido completo:\n{response_text}")
-                        break
+                        
+                        # Si es un error de CSV, intentar continuar con el siguiente paquete
+                        if "Expected" in str(csv_error) or "could not convert" in str(csv_error):
+                            print(f"⚠️  Error de formato CSV, saltando al siguiente paquete")
+                            offset += limite
+                            if paquetes_procesados > 5:  # Evitar demasiados errores
+                                print(f"❌ Demasiados errores de CSV, deteniéndose")
+                                break
+                            continue
+                        else:
+                            break
                     
                     # Si el paquete está vacío, no hay más datos
                     if df_paquete.empty:
@@ -266,11 +307,18 @@ def obtener_datos_desde_api(config_path='config.json', output_folder=LOCAL_FOLDE
                     
                     # Si el paquete tiene menos registros que el límite, es el último
                     if len(df_paquete) < limite:
-                        print(f"📭 Último paquete recibido")
+                        print(f"📭 Último paquete recibido (menos de {limite} registros)")
                         break
+                    elif len(df_paquete) == limite:
+                        print(f"🔄 Paquete completo ({limite} registros), continuando con siguiente paquete...")
                     
                     # Preparar para el siguiente paquete
                     offset += limite
+                    print(f"➡️  Preparando paquete siguiente: offset = {offset}")
+                    
+                    # Agregar una pequeña pausa para evitar saturar la API
+                    import time
+                    time.sleep(1)
                 
                 # Si no se descargaron datos, continuar con el siguiente dispositivo
                 if not datos_completos:

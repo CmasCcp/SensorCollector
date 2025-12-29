@@ -1,0 +1,25 @@
+fecha,fecha_insercion,id_sesion,sesion_descripcion,fecha_inicio,ubicacion,id_proyecto,codigo_interno,dispositivo_descripcion,A01NYUB [Distancia (m)],DS3231 [Grados celcius (°C)],Divisor de Voltaje [Voltaje (V)],LIQ-136 [Profundidad (m)],SHT40 [Grados celcius (°C)],SHT40 [Humedad (%)],SIM7600G [Intensidad señal telefónica (Adimensional)]
+2025-12-28T21:49:01,2025-12-29 09:18:07,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,25.0,7.95,1.09,23.54,46.29,31.0
+2025-12-28T22:18:54,2025-12-29 09:18:12,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,24.25,7.94,1.09,23.13,44.23,31.0
+2025-12-28T22:48:49,2025-12-29 09:18:17,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,23.75,7.92,1.09,23.65,45.17,31.0
+2025-12-28T23:18:44,2025-12-29 09:18:21,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,24.0,7.93,1.09,23.79,43.84,31.0
+2025-12-28T23:48:38,2025-12-29 09:18:26,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,23.75,7.91,1.1,23.5,43.48,31.0
+2025-12-29T00:18:32,2025-12-29 09:18:30,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,23.0,7.94,1.1,19.8,62.0,31.0
+2025-12-29T00:48:23,2025-12-29 09:18:35,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,20.75,7.95,1.1,18.61,67.38,31.0
+2025-12-29T01:18:15,2025-12-29 09:18:39,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,19.25,7.94,1.09,17.5,73.26,31.0
+2025-12-29T01:48:08,2025-12-29 09:18:43,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,18.0,7.94,1.1,16.79,74.94,31.0
+2025-12-29T02:18:01,2025-12-29 09:18:48,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,17.0,7.94,1.1,15.76,73.25,31.0
+2025-12-29T02:47:53,2025-12-29 09:18:52,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,16.0,7.93,1.1,14.54,77.74,31.0
+2025-12-29T03:17:46,2025-12-29 09:18:57,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,15.25,7.9,1.1,14.72,78.18,31.0
+2025-12-29T03:47:41,2025-12-29 09:19:01,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,14.75,7.9,1.1,14.09,77.86,31.0
+2025-12-29T04:17:35,2025-12-29 09:19:06,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,14.25,7.9,1.1,13.38,77.94,31.0
+2025-12-29T04:47:29,2025-12-29 09:19:11,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,14.0,7.93,1.1,13.19,79.42,31.0
+2025-12-29T05:17:24,2025-12-29 09:19:15,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,13.5,7.92,1.1,13.1,77.18,31.0
+2025-12-29T05:47:18,2025-12-29 09:19:19,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,13.25,7.9,1.1,13.47,82.31,31.0
+2025-12-29T06:17:13,2025-12-29 09:19:23,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,13.0,7.92,1.1,12.31,82.71,31.0
+2025-12-29T06:47:06,2025-12-29 09:19:27,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,12.5,7.89,1.1,12.16,83.68,31.0
+2025-12-29T07:17:02,2025-12-29 09:19:32,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,12.75,7.93,1.1,13.59,81.64,31.0
+2025-12-29T07:46:59,2025-12-29 09:19:36,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,14.25,7.91,1.09,16.41,72.5,31.0
+2025-12-29T08:16:59,2025-12-29 09:19:41,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,16.5,7.92,1.09,18.38,67.93,31.0
+2025-12-29T08:46:58,2025-12-29 09:19:45,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,18.5,7.91,1.09,20.67,62.33,31.0
+2025-12-29T09:16:58,2025-12-29 09:19:50,Sin sesión,,,,14,LVAG-03,"Estación de Nivel de Agua para Línea Base, Caren",0.0,20.75,7.9,1.1,22.35,55.23,31.0

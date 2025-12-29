@@ -2,12 +2,12 @@
     {
         "proyecto": 13,
         "codigo_interno": "AGUA-01",
-        "ultima_fecha": "2025-12-17T14:02:12"
+        "ultima_fecha": "2025-12-29T13:34:11"
     },
     {
         "proyecto": 13,
         "codigo_interno": "AGUA-02",
-        "ultima_fecha": "2025-12-17T14:09:15"
+        "ultima_fecha": "2025-12-29T12:50:25"
     },
     {
         "proyecto": 14,
@@ -17,25 +17,68 @@
     {
         "proyecto": 14,
         "codigo_interno": "LVAG-02",
-        "ultima_fecha": "2025-12-17T09:07:20"
+        "ultima_fecha": "2025-12-29T09:36:00"
     },
     {
         "proyecto": 14,
         "codigo_interno": "LVAG-03",
-        "ultima_fecha": "2025-12-17T09:29:58"
+        "ultima_fecha": "2025-12-29T09:19:50"
     },
     {
         "proyecto": 14,
         "codigo_interno": "LVAG-04",
-        "ultima_fecha": "2025-12-17T09:14:08"
+        "ultima_fecha": "2025-12-29T09:11:17"
     },
     {
         "proyecto": 14,
         "codigo_interno": "LVAG-05",
-        "ultima_fecha": "2025-12-17T09:20:37"
+        "ultima_fecha": "2025-12-29T09:24:40"
     },
     {
         "proyecto": 18,
-        "codigo_interno": "HIRIPRO-06"
+        "codigo_interno": "HIRIPRO-01",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-12-15T10:48:02"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-02",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-12-16T13:22:55"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-03",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-11-28T12:23:23"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-04",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-12-18T16:05:13"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-05",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-12-02T12:54:52"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-06",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-11-24T11:39:32"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-07",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2",
+        "ultima_fecha": "2025-12-15T19:01:09"
+    },
+    {
+        "proyecto": 18,
+        "codigo_interno": "HIRIPRO-08",
+        "api_url": "https://api-sensores.cmasccp.cl/listarDatosEstructuradosV2"
     }
 ]
